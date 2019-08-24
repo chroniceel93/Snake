@@ -79,7 +79,9 @@ void Game::Gameboard::draw_block( int xpos
     return;
 }
 
-void Game::Gameboard::set_bg_color(unsigned char r, unsigned char g, unsigned char b) {
+void Game::Gameboard::set_bg_color(unsigned char r
+    , unsigned char g
+    , unsigned char b) {
     background.r = static_cast<int>(r);
     background.g = static_cast<int>(g);
     background.b = static_cast<int>(b);
