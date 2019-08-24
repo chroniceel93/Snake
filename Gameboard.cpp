@@ -3,6 +3,11 @@
 // Constructors
 Game::Gameboard::Gameboard() {
     SDL_Status = true; // assume sdl will work, unless it does not
+
+    // default background color (black)
+    background.r = 0;
+    background.g = 0;
+    background.b = 0;
    
     if (SDL_Init(SDL_INIT_VIDEO) < 0) {
         throw SDL_GetError();
@@ -20,24 +25,28 @@ Game::Gameboard::Gameboard() {
             throw SDL_GetError();
             SDL_Status = false;
         } else {
-            // Get Window Surface
-            surface = SDL_GetWindowSurface(window);
-            SDL_FillRect(
-                surface
-                , NULL
-                , SDL_MapRGB(surface->format, 0, 0, 0));
-
-            SDL_UpdateWindowSurface(window);
+            renderer = SDL_CreateRenderer(
+                window
+                , -1
+                , SDL_RENDERER_ACCELERATED);
+            if (renderer == nullptr) {
+                throw SDL_GetError();
+                SDL_Status = false;
+            } else {
+                SDL_SetRenderDrawColor(
+                    renderer
+                    , background.r
+                    , background.g
+                    , background.b
+                    , 255);
+                SDL_RenderPresent(renderer);
+            }
         }
     }
 
     bloc_width = 10;
     bloc_height = 10;
 
-    // default background color (black)
-    background.r = 0;
-    background.g = 0;
-    background.b = 0;
     mem = k_right; // default key
 }
 
@@ -150,6 +159,9 @@ Game::KeyPressed Game::Gameboard::update_input() {
 }
 
 Game::Gameboard::~Gameboard() {
+    SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(window);
+    renderer = nullptr;
+    window = nullptr;
     SDL_Quit();
 }
