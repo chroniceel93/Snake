@@ -45,8 +45,9 @@ namespace Game {
         // pixel size given arbitrary screen size.
         int bloc_height; // how high the block is
         int bloc_width; // how wide a block is
-        int screen_width; // width of the screen
-        int screen_height; // height of the screen
+
+        const int screen_width = 800;
+        const int screen_height = 600;
 
         bool SDL_Status; // keep track of sdl status.
 
@@ -72,7 +73,6 @@ namespace Game {
             , unsigned char g
             , unsigned char b);
         void set_bg_color(unsigned char r, unsigned char g, unsigned char b) ;
-        void throwSDLError(const std::string &msg) {}
         void updateScreen();
 
         KeyPressed update_input();

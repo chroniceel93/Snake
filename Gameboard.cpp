@@ -4,6 +4,32 @@
 Game::Gameboard::Gameboard() {
     SDL_Status = true; // assume sdl will work, unless it does not
    
+    if (SDL_Init(SDL_INIT_VIDEO) < 0) {
+        throw SDL_GetError();
+        SDL_Status = false;
+    } else {
+        // create window
+        window = SDL_CreateWindow(
+                "Snake"
+                , SDL_WINDOWPOS_CENTERED
+                , SDL_WINDOWPOS_CENTERED
+                , screen_width
+                , screen_height
+                , SDL_WINDOW_SHOWN);
+        if (window == nullptr) {
+            throw SDL_GetError();
+            SDL_Status = false;
+        } else {
+            // Get Window Surface
+            surface = SDL_GetWindowSurface(window);
+            SDL_FillRect(
+                surface
+                , NULL
+                , SDL_MapRGB(surface->format, 0, 0, 0));
+
+            SDL_UpdateWindowSurface(window);
+        }
+    }
 
     bloc_width = 10;
     bloc_height = 10;
@@ -94,7 +120,7 @@ void Game::Gameboard::updateScreen() {
 }
 
 Game::KeyPressed Game::Gameboard::update_input() {
-    while (SDL_PollEvent(&input)) {
+    while (SDL_PollEvent(&input) != 0) {
         if (input.type == SDL_QUIT) {
             SDL_Status = false; // SDL will still work
             // however, logic should respect this, and exit out of given program
@@ -124,7 +150,6 @@ Game::KeyPressed Game::Gameboard::update_input() {
 }
 
 Game::Gameboard::~Gameboard() {
-    SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(window);
     SDL_Quit();
 }
