@@ -25,14 +25,15 @@ void Snake::Snake::kill_switch() {
 
 void Snake::Snake::place_apple() {
     int x = std::rand() % 80;
-    int y = (std::rand() % 59) + 1; // plus one to stop apples appearing in scoreboard
+    int y = (std::rand() % 59) + 1; // plus one to stop apples in scoreboard
 
     // check coordinates to see if snake is on the board position
     std::queue<int> tempx, tempy;
     tempx = snakex;
     tempy = snakey;
 
-    // This loop should never exit if an Apple is going to be placed on the snake
+    // This loop should never exit if an Apple is 
+    // going to be placed on the snake
     while (!tempx.empty() && !tempy.empty()) {
         if (x == tempx.front() && y == tempy.front()) {
             x = std::rand() % 80;

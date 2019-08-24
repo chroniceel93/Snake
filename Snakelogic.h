@@ -8,8 +8,9 @@
 #include <queue>
 #include <string>
 
-// NOTE: All logic assmues playing field is 80 wide by 60 high, with the (0, 0) co-ordinate
-// being the top left of the field, and the top row being a scoreboard.
+// NOTE: All logic assmues playing field is 80 wide by 60 high, 
+// with the (0, 0) co-ordinate being the top left of the field, 
+// and the top row being a scoreboard.
 
 // NOTE: Main function is assumed to handle game over conditions at the moment.
 // will fix this later?
