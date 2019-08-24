@@ -2,7 +2,7 @@
 
 Snake::Snake::Snake() {
     g = new Game::Gameboard();
-    direction = g->update_input();
+    input = g->update_input();
     score = 0;
     apple_counter = 0;
     pause_queue = true; //start paused so snake is two long
@@ -20,27 +20,27 @@ Snake::Snake::Snake() {
 // it is essentail to make sure that you cannot do a 180
 // turn in a single tick, otherwise you will find the
 // oroborous function returning true, so I am
-// creating a copy of the last ticks direction state,
-// and checking that against the current direction state.
+// creating a copy of the last ticks input state,
+// and checking that against the current input state.
 void Snake::Snake::input_override() {
-    if (direction == Game::KeyPressed::k_up 
-        && direction_old == Game::KeyPressed::k_down) {
-        direction = Game::KeyPressed::k_down;
+    if (input == Game::KeyPressed::k_up 
+        && input_old == Game::KeyPressed::k_down) {
+        input = Game::KeyPressed::k_down;
     } else {}
 
-    if (direction == Game::KeyPressed::k_down
-        && direction_old == Game::KeyPressed::k_up) {
-        direction = Game::KeyPressed::k_up;
+    if (input == Game::KeyPressed::k_down
+        && input_old == Game::KeyPressed::k_up) {
+        input = Game::KeyPressed::k_up;
     } else {}
 
-    if (direction == Game::KeyPressed::k_left
-        && direction_old == Game::KeyPressed::k_right) {
-        direction = Game::KeyPressed::k_right;
+    if (input == Game::KeyPressed::k_left
+        && input_old == Game::KeyPressed::k_right) {
+        input = Game::KeyPressed::k_right;
     }
 
-    if (direction == Game::KeyPressed::k_right
-        && direction_old == Game::KeyPressed::k_left) {
-        direction = Game::KeyPressed::k_left;
+    if (input == Game::KeyPressed::k_right
+        && input_old == Game::KeyPressed::k_left) {
+        input = Game::KeyPressed::k_left;
     }
 
     return;
@@ -81,7 +81,7 @@ void Snake::Snake::place_apple() {
 }
 
 void Snake::Snake::restart_game() { // copy of constructor stuffs
-    direction = g->update_input();
+    input = g->update_input();
     score = 0;
     apple_counter = 0;
     pause_queue = true; //start paused so snake is two long
@@ -130,7 +130,7 @@ void Snake::Snake::update_snake() {
 }
 
 void Snake::Snake::update() {
-    direction = g->update_input();
+    input = g->update_input();
     input_override();
     if (game) {
         // handle case where no apples are currently on board
@@ -139,7 +139,7 @@ void Snake::Snake::update() {
             is_apple = true;
         } else {
             if (g->status()) {
-                switch (direction) {
+                switch (input) {
                     case Game::KeyPressed::k_up:
                         snakex.push(snakex.back());
                         if ((snakey.back() -1) == 0) {
@@ -172,11 +172,6 @@ void Snake::Snake::update() {
                         }
                         snakey.push(snakey.back());
                         break;
-                    case Game::KeyPressed::k_space:
-                        if (!game) {
-                            restart_game();
-                        } else {}
-                        break;
                     default:
                         break;
                 }
@@ -186,10 +181,13 @@ void Snake::Snake::update() {
             } else {
                 kill_switch();
             }
+        }   
+    } else {
+        if (input == Game::KeyPressed::k_space) {
+            restart_game();
         }
-        
     }
-    direction_old = direction;
+    input_old = input;
     return;
 }
 

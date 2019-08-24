@@ -31,7 +31,7 @@ namespace Snake {
 
 		int score, apple_counter;
 
-		Game::KeyPressed direction, direction_old;
+		Game::KeyPressed input, input_old;
 
 		std::queue<int> snakex, snakey; // snake coordinates
 
