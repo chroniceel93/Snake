@@ -129,7 +129,7 @@ void Game::Gameboard::updateScreen() {
 }
 
 Game::KeyPressed Game::Gameboard::update_input() {
-    while (SDL_PollEvent(&input) != 0) {
+    while (SDL_PollEvent(&input)) {
         if (input.type == SDL_QUIT) {
             SDL_Status = false; // SDL will still work
             // however, logic should respect this, and exit out of given program

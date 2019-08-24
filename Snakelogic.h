@@ -31,7 +31,7 @@ namespace Snake {
 
 		int score, apple_counter;
 
-		Game::KeyPressed direction;
+		Game::KeyPressed direction, direction_old;
 
 		std::queue<int> snakex, snakey; // snake coordinates
 
@@ -39,6 +39,7 @@ namespace Snake {
 
 		Snake() ;
 
+		void input_override() ;
 		void kill_switch() ;
 		void place_apple() ;
 		void restart_game() ;

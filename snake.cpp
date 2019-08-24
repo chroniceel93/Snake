@@ -12,8 +12,6 @@ int main() {
         }
     } catch (std::string const &s) {
         std::cout << s;
-    } catch (...) {
-        std::cout << "Whoopsie! Not sure what this is! :3";
     }
 
     delete s; // this is normally assumed, I'm declairing explicitly because you

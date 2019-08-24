@@ -17,6 +17,35 @@ Snake::Snake::Snake() {
     is_apple = false;
 }
 
+// it is essentail to make sure that you cannot do a 180
+// turn in a single tick, otherwise you will find the
+// oroborous function returning true, so I am
+// creating a copy of the last ticks direction state,
+// and checking that against the current direction state.
+void Snake::Snake::input_override() {
+    if (direction == Game::KeyPressed::k_up 
+        && direction_old == Game::KeyPressed::k_down) {
+        direction = Game::KeyPressed::k_down;
+    } else {}
+
+    if (direction == Game::KeyPressed::k_down
+        && direction_old == Game::KeyPressed::k_up) {
+        direction = Game::KeyPressed::k_up;
+    } else {}
+
+    if (direction == Game::KeyPressed::k_left
+        && direction_old == Game::KeyPressed::k_right) {
+        direction = Game::KeyPressed::k_right;
+    }
+
+    if (direction == Game::KeyPressed::k_right
+        && direction_old == Game::KeyPressed::k_left) {
+        direction = Game::KeyPressed::k_left;
+    }
+
+    return;
+}
+
 void Snake::Snake::kill_switch() {
     game = false;
     exit = true;
@@ -101,8 +130,8 @@ void Snake::Snake::update_snake() {
 }
 
 void Snake::Snake::update() {
-    auto tmp = direction;
     direction = g->update_input();
+    input_override();
     if (game) {
         // handle case where no apples are currently on board
         if (!is_apple) {
@@ -110,51 +139,38 @@ void Snake::Snake::update() {
             is_apple = true;
         } else {
             if (g->status()) {
-                // it is essentail to make sure that you cannot do a 180
-                // turn in a single tick, otherwise you will find the
-                // oroborous function returning true, so I am
-                // creating a copy of the last ticks direction state,
-                // and checking that against the current direction state.
                 switch (direction) {
                     case Game::KeyPressed::k_up:
-                        if (tmp != Game::KeyPressed::k_down) {
-                            snakex.push(snakex.back());
-                            if ((snakey.back() - 1) == 0) {
-                                game = false; // oob, game over
-                            } else {
-                                snakey.push(snakey.back() - 1);
-                            }
-                        } else {} // do_nothing!
+                        snakex.push(snakex.back());
+                        if ((snakey.back() -1) == 0) {
+                            game = false; // oob, game over
+                        } else {
+                            snakey.push(snakey.back() - 1);
+                        }
                         break;
                     case Game::KeyPressed::k_right:
-                        if (tmp != Game::KeyPressed::k_left) {
-                            if ((snakex.back() + 1) == 80) {
-                                game = false;  // oob, game over
-                            } else {
-                                snakex.push(snakex.back() + 1);
-                            }
-                            snakey.push(snakey.back());
-                        } else {} // do_nothing!
+                        if ((snakex.back() + 1) == 80) {
+                            game = false; // oob, game over
+                        } else {
+                            snakex.push(snakex.back() + 1);
+                        }
+                        snakey.push(snakey.back());
                         break;
                     case Game::KeyPressed::k_down:
-                        if (tmp != Game::KeyPressed::k_up) {
-                            snakex.push(snakex.back());
-                            if ((snakey.back() + 1) == 60) {
-                                game = false; // oob, game over
-                            } else {
-                                snakey.push(snakey.back() + 1);
-                            }
-                        } else {} // do_nothing!
+                        snakex.push(snakex.back());
+                        if ((snakey.back() + 1) == 60) {
+                            game = false; // oob, game over
+                        } else {
+                            snakey.push(snakey.back() + 1);
+                        }
                         break;
                     case Game::KeyPressed::k_left:
-                        if (tmp != Game::KeyPressed::k_right) {
-                            if ((snakex.back() - 1) == 0) {
-                                game = false; // oob, game over
-                            } else {
-                                snakex.push(snakex.back() - 1);
-                            }
-                            snakey.push(snakey.back());
-                        } else {} // do_nothing!
+                        if ((snakex.back() - 1) == 0) {
+                            game = false; // oob, game over
+                        } else {
+                            snakex.push(snakex.back() - 1);
+                        }
+                        snakey.push(snakey.back());
                         break;
                     case Game::KeyPressed::k_space:
                         if (!game) {
@@ -173,6 +189,7 @@ void Snake::Snake::update() {
         }
         
     }
+    direction_old = direction;
     return;
 }
 
