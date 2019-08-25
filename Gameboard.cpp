@@ -114,6 +114,11 @@ void Game::Gameboard::draw_block( int xpos
     return;
 }
 
+void Game::Gameboard::input_reset() {
+    mem = k_right;
+    return;
+}
+
 void Game::Gameboard::set_bg_color(unsigned char r
     , unsigned char g
     , unsigned char b) {

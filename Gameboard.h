@@ -72,6 +72,7 @@ namespace Game {
             , unsigned char r
             , unsigned char g
             , unsigned char b);
+        void input_reset();
         void set_bg_color(unsigned char r, unsigned char g, unsigned char b) ;
         void updateScreen();
 

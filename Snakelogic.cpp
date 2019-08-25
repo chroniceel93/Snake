@@ -2,7 +2,7 @@
 
 Snake::Snake::Snake() {
     g = new Game::Gameboard();
-    input = g->update_input();
+    input = Game::KeyPressed::k_right;
     score = 0;
     apple_counter = 0;
     pause_queue = true; //start paused so snake is two long
@@ -81,7 +81,6 @@ void Snake::Snake::place_apple() {
 }
 
 void Snake::Snake::restart_game() { // copy of constructor stuffs
-    input = g->update_input();
     score = 0;
     apple_counter = 0;
     pause_queue = true; //start paused so snake is two long
@@ -93,7 +92,7 @@ void Snake::Snake::restart_game() { // copy of constructor stuffs
     }
     snakex.push(40);
     snakey.push(29);
-    game = 1;
+    game = true;
     for (auto &x : board) {
         for (auto &y : x) {
             y = No_Apple;
@@ -101,6 +100,8 @@ void Snake::Snake::restart_game() { // copy of constructor stuffs
     }
     g->blank_screen();
     is_apple = false;
+    input = Game::KeyPressed::k_right;
+    g->input_reset();
     return;
 }
 
@@ -177,17 +178,18 @@ void Snake::Snake::update() {
                 }
                 update_snake();
                 g->updateScreen();
-                SDL_Delay(100);
             } else {
                 kill_switch();
             }
         }   
+        input_old = input;
     } else {
         if (input == Game::KeyPressed::k_space) {
             restart_game();
         }
     }
-    input_old = input;
+    SDL_Delay(100); // delay 100ms after every tick
+    // TODO: Make each tick last exactly 100ms (unless tick goes over)
     return;
 }
 
