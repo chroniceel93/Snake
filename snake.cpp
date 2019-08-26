@@ -15,7 +15,8 @@ int main() {
     }
 
     delete s; // this is normally assumed, I'm declairing explicitly because you
-    // can never know when a compiler will misbehave and leave a class object dead in-memory.
+    // can never know when a compiler will misbehave 
+    // and leave a class object dead in-memory.
 
     return 0;
 }
