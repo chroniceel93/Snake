@@ -36,7 +36,7 @@ namespace Game {
  * We are assuming that the screen size is 800x600, will work on decoupling
  * resolution later
  *
- * There is a 60th vertical line that is reserved for scoreboard functionality,
+ * The 1st vertical line is reserved for scoreboard functionality,
  * will be implemented later
  */
     class Gameboard {
@@ -51,32 +51,79 @@ namespace Game {
 
         bool SDL_Status; // keep track of sdl status.
 
-        SDL_Window *window;
-        SDL_Texture *render_texture;
-        SDL_Renderer *renderer;
-        SDL_Color background;
-        SDL_Event input;
+        SDL_Window *window; // SDL window object
+        SDL_Texture *render_texture; // SDL texture object (this holds gameboard
+                                    // state)
+        SDL_Renderer *renderer; // SDL renderer object (this draws to things)
+        SDL_Color background;  // background color
+        SDL_Event input; // input queue
 
-        KeyPressed mem;
+        KeyPressed mem; 
 
     public:
 
-        // Constructors
+        // Constructor
         Gameboard() ;
 
+/**
+ * bool status();
+ * 
+ * Returns SDL_Status, used to determine whether SDL initialized correctly
+ * from outside of the class
+ * 
+ * return bool
+ **/
         bool status();
 
+/**
+ * void blank_screen()
+ * 
+ * re-draws entire texture with background color to reset apparant game state
+ **/
         void blank_screen();
+
+/**
+ * void draw_block()
+ * 
+ * Takes a co-ordinate pair and a color, and draws a block of that color,
+ * at that co-ordinate.
+ * 
+ * Assumes that the co-ordinates conform to an 80x60 grid.
+ **/
         void draw_block( int xpos
             , int ypos
             , unsigned char r
             , unsigned char g
             , unsigned char b);
+
+/**
+ * void input_reset()
+ * 
+ * Simple utility function that resets mem to default value.
+ **/
         void input_reset();
+
+/**
+ * void set_bg_color()
+ * 
+ * Simple utility function that updates the background color.
+ **/
         void set_bg_color(unsigned char r, unsigned char g, unsigned char b) ;
+
+/**
+ * void update_screen()
+ * 
+ * copies the texture to the screen surface and presents that surface
+ **/
         void update_screen();
         
-
+/**
+ * KeyPressed update_input();
+ * 
+ * Runs through the SDL_Event queue, and returns the inputs for me.
+ * 
+ * return mem (the valid input)
+ **/
         KeyPressed update_input();
 
         ~Gameboard() ;
@@ -84,26 +131,3 @@ namespace Game {
 };
 
 #endif
-
-/**
- * Gameboard function list:
- * 
- * bool update_input()
- *     handles input, sets KeyPressed with input from SDL_Event
- * 
- * void blank_screen()
- *     draws entire screen with background color
- * 
- * void draw_block()
- *     draws a block (10x10) at the given coordinates with
- *     the given colors
- * 
- * void set_bg_color()
- *     change the background color
- * 
- * void throwSDLError()
- * 
- * void updateScreen();
- *     present sdl renderer
- *
- */

@@ -35,19 +35,23 @@ namespace Snake {
 
 		std::queue<int> snakex, snakey; // snake coordinates
 
-	public:
-
-		Snake() ;
 
 		void input_override() ;
 		void kill_switch() ;
 		void place_apple() ;
 		void restart_game() ;
 		void update_snake() ;
+
+		bool oroborous_check() ;
+
+
+	public:
+
+		Snake() ;
+
 		void update() ;
 
 		bool exit_check() ;
-		bool oroborous_check() ;
 
 		~Snake() ;
 	};
