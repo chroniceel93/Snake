@@ -17,11 +17,6 @@ Snake::Snake::Snake() {
     is_apple = false;
 }
 
-// it is essentail to make sure that you cannot do a 180
-// turn in a single tick, otherwise you will find the
-// oroborous function returning true, so I am
-// creating a copy of the last ticks input state,
-// and checking that against the current input state.
 void Snake::Snake::input_override() {
     if (input == Game::KeyPressed::k_up 
         && input_old == Game::KeyPressed::k_down) {
@@ -51,6 +46,13 @@ void Snake::Snake::kill_switch() {
     exit = true;
     return;
 }
+// it is essentail to make sure that you cannot do a 180
+// turn in a single tick, otherwise you will find the
+// oroborous function returning true, so I am
+// creating a copy of the last ticks input state,
+// and checking that against the current input state.
+// scattering theis notice here and there bc without this rationale
+// this bit of logic seems somewhat arbitrary
 
 void Snake::Snake::place_apple() {
     int x = std::rand() % 80;

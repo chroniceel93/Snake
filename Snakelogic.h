@@ -27,21 +27,82 @@ namespace Snake {
 		bool board[80][59], pause_queue, game, exit;
 		bool is_apple; // set to true when appple is put on board
 
-		Game::Gameboard *g;
+		Game::Gameboard *g; // the gameboard class we will be using
 
-		int score, apple_counter;
+		int score, apple_counter; 
+		// score is currently unused, but I've got plans
+		// apple_counter may be redundant... will double-check before I remove
 
 		Game::KeyPressed input, input_old;
+		// input is the input for the current tick
+		// input_old is the input from the last tick, used to check to see
+		// 		if next input is compatible with the last
+		//		ex) going up, you press down, snake immediately eats itself
+		//			and oroborous_check trips, this is an instant game over.
+		//			It can also happen by accident, so yeah, making sure to 
+		//			handle this automatically!
 
 		std::queue<int> snakex, snakey; // snake coordinates
 
-
+/**
+ * void input_override()
+ * 
+ * Checks the current input against the input from the last tick to make sure
+ * that the snake is not doubling back on itself, as this is an instant game
+ * over that is far too easy to trip by accident.
+ **/
 		void input_override() ;
+
+/**
+ * void kill_switch()
+ * 
+ * Sets game to false and exit to true, if main is structured correctly (
+ * a while loop controlled by exit_check()), then this will shut everything down
+ **/
 		void kill_switch() ;
+
+/**
+ * void place_apple
+ * 
+ * Uses random co-ordinates to set one cell in the board matrix to true,
+ * and draws a red dot at those co-ordinates, giving the snake a target.
+ **/
 		void place_apple() ;
+
+/**
+ * void restart_game()
+ * 
+ * Re-initializes every variable used in the snake game, empties the snake
+ * co-ordinate queues and blanks the screen.
+ **/
 		void restart_game() ;
+
+/**
+ * void update_snake()
+ * 
+ * Once the snakes' position is updated by update(), run all of the necessary
+ * logic checks to see what happens.
+ * 
+ * If the snakes' co-ordinates match that of an apple, then skip popping the
+ * tail off the snake to grow and place a new apple
+ * 
+ * Run the oroborous function to check to see if the snake is eating itself
+ * 
+ * Check to see if the snake is out-of-bounds
+ * 
+ * Finally, update the gameboard, and pop the tail off the snake.
+ **/
 		void update_snake() ;
 
+/**
+ * bool oroborous_check()
+ * 
+ * creates copies of the snake co-ordinate queues, and by popping
+ * the values in the copied queues, checks against the head co-ordinate from the
+ * original queue, to verify if the snake is eating itself
+ * 
+ * return status, if false game ends, if true game continues
+ **/
 		bool oroborous_check() ;
 
 
@@ -49,8 +110,21 @@ namespace Snake {
 
 		Snake() ;
 
+/**
+ * void update()
+ * 
+ * This is the main logic function. It handles inputs and modifies the
+ * snake's position accordingly, and calls the functions, when appropriate
+ * that check to see if the snake's position is valid, and handles a game over
+ * status.
+ **/
 		void update() ;
 
+/**
+ * bool exit_check()
+ * 
+ * returns exit (representing the status of sdl via g->status())
+ **/
 		bool exit_check() ;
 
 		~Snake() ;
