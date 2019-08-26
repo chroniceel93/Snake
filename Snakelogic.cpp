@@ -150,7 +150,7 @@ void Snake::Snake::update() {
                         }
                         break;
                     case Game::KeyPressed::k_right:
-                        if ((snakex.back() + 1) == 80) {
+                        if ((snakex.back() + 1) == 81) {
                             game = false; // oob, game over
                         } else {
                             snakex.push(snakex.back() + 1);
@@ -177,7 +177,7 @@ void Snake::Snake::update() {
                         break;
                 }
                 update_snake();
-                g->updateScreen();
+                g->update_screen();
             } else {
                 kill_switch();
             }

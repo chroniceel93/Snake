@@ -52,7 +52,7 @@ namespace Game {
         bool SDL_Status; // keep track of sdl status.
 
         SDL_Window *window;
-        SDL_Surface *surface;
+        SDL_Texture *render_texture;
         SDL_Renderer *renderer;
         SDL_Color background;
         SDL_Event input;
@@ -74,7 +74,8 @@ namespace Game {
             , unsigned char b);
         void input_reset();
         void set_bg_color(unsigned char r, unsigned char g, unsigned char b) ;
-        void updateScreen();
+        void update_screen();
+        
 
         KeyPressed update_input();
 

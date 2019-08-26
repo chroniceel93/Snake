@@ -8,7 +8,8 @@ Game::Gameboard::Gameboard() {
     background.r = 0;
     background.g = 0;
     background.b = 0;
-   
+
+    // init sdl
     if (SDL_Init(SDL_INIT_VIDEO) < 0) {
         throw SDL_GetError();
         SDL_Status = false;
@@ -44,6 +45,16 @@ Game::Gameboard::Gameboard() {
         }
     }
 
+    // init texture
+    render_texture = SDL_CreateTexture(renderer
+        , SDL_PIXELFORMAT_RGBA8888
+        , SDL_TEXTUREACCESS_TARGET
+        , 800
+        , 600);
+
+    // set texture as render target
+    SDL_SetRenderTarget(renderer, render_texture);
+
     bloc_width = 10;
     bloc_height = 10;
 
@@ -55,18 +66,18 @@ bool Game::Gameboard::status() {
 }
 
 void Game::Gameboard::blank_screen() {
-        SDL_Rect temp;
-        temp.w = 800;
-        temp.h = 600;
-        temp.x = 0;
-        temp.y = 0;
-        SDL_SetRenderDrawColor(renderer
-            , background.r
-            , background.g
-            , background.b
-            , 255);
-        SDL_RenderFillRect(renderer, &temp);
-        return;
+    SDL_Rect temp;
+    temp.w = 800;
+    temp.h = 600;
+    temp.x = 0;
+    temp.y = 0;
+    SDL_SetRenderDrawColor(renderer
+        , background.r
+        , background.g
+        , background.b
+        , 255);
+    SDL_RenderFillRect(renderer, &temp);
+    return;
 }
 
 void Game::Gameboard::draw_block( int xpos
@@ -128,8 +139,11 @@ void Game::Gameboard::set_bg_color(unsigned char r
     return;
 }
 
-void Game::Gameboard::updateScreen() {
+void Game::Gameboard::update_screen() {
+    SDL_SetRenderTarget(renderer, NULL);
+    SDL_RenderCopy(renderer, render_texture, 0, 0);
     SDL_RenderPresent(renderer);
+    SDL_SetRenderTarget(renderer, render_texture);
     return;
 }
 
