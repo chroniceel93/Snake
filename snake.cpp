@@ -6,6 +6,7 @@ const int H = 600;
 int main() {
 
     Snake::Snake *s = new Snake::Snake();
+    // no idea of the try-catch attempt actually *works*
     try {
         while (!(*s).exit_check()) {
             (*s).update();
