@@ -8,7 +8,13 @@ Snake::Snake::Snake() {
     pause_queue = true; //start paused so snake is two long
     snakex.push(40);
     snakey.push(29);
-    game = true;
+    if (g->status()) {
+        game = true;
+        exit = false;
+    } else {
+        game = false;
+        exit = true;
+    }
     for (auto &x : board) {
         for (auto &y : x) {
             y = No_Apple;
@@ -132,6 +138,8 @@ void Snake::Snake::update_snake() {
     return;
 }
 
+
+// TODO: restructure input handler such that we only call g->status() once
 void Snake::Snake::update() {
     input = g->update_input();
     input_override();
@@ -186,8 +194,12 @@ void Snake::Snake::update() {
         }   
         input_old = input;
     } else {
-        if (input == Game::KeyPressed::k_space) {
-            restart_game();
+        if (g->status()) {
+            if (input == Game::KeyPressed::k_space) {
+                restart_game();
+            } else {} // do nothing
+        } else {
+            kill_switch();
         }
     }
     SDL_Delay(100); // delay 100ms after every tick
