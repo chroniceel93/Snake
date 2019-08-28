@@ -49,7 +49,8 @@ namespace Game {
         const int screen_width = 800;
         const int screen_height = 600;
 
-        bool SDL_Status; // keep track of sdl status.
+        bool SDL_Status; // keep track of sdl status. If false, game logic 
+        // should abort immediately
 
         SDL_Window *window; // SDL window object
         SDL_Texture *render_texture; // SDL texture object (this holds gameboard
@@ -78,7 +79,8 @@ namespace Game {
 /**
  * void blank_screen()
  * 
- * re-draws entire texture with background color to reset apparant game state
+ * re-draws entire texture with background color. This should be called if
+ * restarting game logic
  **/
         void blank_screen();
 
@@ -120,9 +122,13 @@ namespace Game {
 /**
  * KeyPressed update_input();
  * 
- * Runs through the SDL_Event queue, and returns the inputs for me.
+ * Handles the input queue from sdl, saves the last given input into mem,
+ * and returns that.
  * 
- * return mem (the valid input)
+ * If, instead, SDL_QUIT is set, the set the sdl state accordingly, and logic
+ * should exit.
+ * 
+ * return KeyPressed
  **/
         KeyPressed update_input();
 
