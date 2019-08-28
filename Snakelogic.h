@@ -12,12 +12,10 @@
 // with the (0, 0) co-ordinate being the top left of the field, 
 // and the top row being a scoreboard.
 
-// NOTE: Main function is assumed to handle game over conditions at the moment.
-// will fix this later?
-
 namespace Snake {
 	class Snake {
 	private:
+		// help increase readability of apple related topics
 		enum BoardState {
 			No_Apple = false,
 			Apple = true
@@ -27,11 +25,10 @@ namespace Snake {
 		bool board[80][59], pause_queue, game, exit;
 		bool is_apple; // set to true when appple is put on board
 
-		Game::Gameboard *g; // the gameboard class we will be using
+		Game::Gameboard *g; // gameboard handles I/O for game logic
 
-		int score, apple_counter; 
+		int score;
 		// score is currently unused, but I've got plans
-		// apple_counter may be redundant... will double-check before I remove
 
 		Game::KeyPressed input, input_old;
 		// input is the input for the current tick
@@ -62,10 +59,11 @@ namespace Snake {
 		void kill_switch() ;
 
 /**
- * void place_apple
+ * void place_apple()
  * 
- * Uses random co-ordinates to set one cell in the board matrix to true,
- * and draws a red dot at those co-ordinates, giving the snake a target.
+ * Generates random co-ordinates, checks against the snake co-ordinate queue
+ * to make sure that we do not place the apple on the snake, sets the
+ * corresponding board co-ordinate to true, and draws an apple at that location
  **/
 		void place_apple() ;
 
@@ -80,17 +78,17 @@ namespace Snake {
 /**
  * void update_snake()
  * 
- * Once the snakes' position is updated by update(), run all of the necessary
- * logic checks to see what happens.
+ * using the current state of the class:
  * 
- * If the snakes' co-ordinates match that of an apple, then skip popping the
- * tail off the snake to grow and place a new apple
+ * First, run oroborous_check() to see if we are eating ourselves, if we
+ * are skip all other logic and set state to false, otherwise
  * 
- * Run the oroborous function to check to see if the snake is eating itself
+ * Second, check to see if we are eating an apple, if we are, grow the snake,
+ * and place a new apple
  * 
- * Check to see if the snake is out-of-bounds
- * 
- * Finally, update the gameboard, and pop the tail off the snake.
+ * Third, if the queue is unpaused, draw the updated snake head co-ordinates,
+ * draw the bg color over the tbr tail and pop the tail co-ords
+ *         else, if the queue is paused, only update the head co-ords.
  **/
 		void update_snake() ;
 
@@ -127,6 +125,7 @@ namespace Snake {
  **/
 		bool exit_check() ;
 
+		// Destructor
 		~Snake() ;
 	};
 };

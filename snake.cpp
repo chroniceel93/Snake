@@ -22,9 +22,6 @@ int main() {
     return 0;
 }
 
-
-
-// TODO: Exit condition in main loop. 
-// TODO: General input, up, down, left, right wired in. 
+// TODO: ticker class?
 
 // Author: William Tradewell - ChronicEel93
