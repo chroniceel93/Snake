@@ -58,7 +58,7 @@ Game::Gameboard::Gameboard() {
                     SDL_Status = false;
                 } else {
                     // load our font
-                    font = TTF_OpenFont("Inconsolata.ttf", 8);
+                    font = TTF_OpenFont("Inconsolata.ttf", 14);
                     if (font == nullptr) {
                         throw SDL_GetError();
                         SDL_Status = false;

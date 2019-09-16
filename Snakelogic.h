@@ -27,8 +27,12 @@ namespace Snake {
 
 		Game::Gameboard *g; // gameboard handles I/O for game logic
 
-		int score; // score counter!
-
+		int score;// score counter!
+		const int boundl = 0;
+		const int boundr = 81;
+		const int boundu = 1;
+		const int boundd = 60;
+		
 		Game::KeyPressed input, input_old;
 		// input is the input for the current tick
 		// input_old is the input from the last tick, used to check to see

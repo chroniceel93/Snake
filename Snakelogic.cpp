@@ -2,6 +2,7 @@
 
 Snake::Snake::Snake() {
     g = new Game::Gameboard();
+
     input = Game::KeyPressed::k_right;
     score = 0;
     pause_queue = true; //start paused so snake is two long
@@ -84,8 +85,9 @@ void Snake::Snake::kill_switch() {
  **/
 void Snake::Snake::place_apple() {
     // generate random co-ordinates that fit on 80x59 grid
-    int x = std::rand() % 80;
-    int y = (std::rand() % 59) + 1; // plus one to stop apples in scoreboard
+    int x = std::rand() % (boundr - boundl);
+    // plus one to stop apples in scoreboard
+    int y = (std::rand() % (boundd - boundu)) + 2; 
 
     // check coordinates to see if snake is on the board position
     std::queue<int> tempx, tempy;
@@ -268,14 +270,14 @@ void Snake::Snake::update() {
                 switch (input) {
                     case Game::KeyPressed::k_up:
                         snakex.push(snakex.back());
-                        if ((snakey.back() -1) == 0) {
+                        if ((snakey.back() -1) == boundu) {
                             game = false; // oob, game over
                         } else {
                             snakey.push(snakey.back() - 1);
                         }
                         break;
                     case Game::KeyPressed::k_right:
-                        if ((snakex.back() + 1) == 81) {
+                        if ((snakex.back() + 1) == boundr) {
                             game = false; // oob, game over
                         } else {
                             snakex.push(snakex.back() + 1);
@@ -284,14 +286,14 @@ void Snake::Snake::update() {
                         break;
                     case Game::KeyPressed::k_down:
                         snakex.push(snakex.back());
-                        if ((snakey.back() + 1) == 60) {
+                        if ((snakey.back() + 1) == boundd) {
                             game = false; // oob, game over
                         } else {
                             snakey.push(snakey.back() + 1);
                         }
                         break;
                     case Game::KeyPressed::k_left:
-                        if ((snakex.back() - 1) == 0) {
+                        if ((snakex.back() - 1) == boundl) {
                             game = false; // oob, game over
                         } else {
                             snakex.push(snakex.back() - 1);
