@@ -58,7 +58,7 @@ Game::Gameboard::Gameboard() {
                     SDL_Status = false;
                 } else {
                     // load our font
-                    font = TTF_OpenFont("Inconsolata.ttf", 10);
+                    font = TTF_OpenFont("Inconsolata.ttf", 8);
                     if (font == nullptr) {
                         throw SDL_GetError();
                         SDL_Status = false;
@@ -201,12 +201,11 @@ void Game::Gameboard::draw_text ( int xpos
 
     SDL_Rect temp; // holds dimensions of text box
 
-
-
     // It's generally really really bad to use cstrings. No choice.
-    SDL_Surface *text_surface = TTF_RenderText_Solid( font
+    SDL_Surface *text_surface = TTF_RenderText_Shaded( font
                                                     , input.c_str() 
-                                                    , text);
+                                                    , text
+                                                    , background);
     if (text_surface == nullptr) {
         throw "Failed to load text to surface";
     } else {
@@ -219,8 +218,9 @@ void Game::Gameboard::draw_text ( int xpos
         SDL_RenderFillRect(renderer, &temp);
 
         // render text
-        text_swap = SDL_CreateTextureFromSurface(renderer, text_surface);
-        SDL_RenderCopy(renderer, text_swap, &temp, &temp);
+        SDL_Texture *text_swap = SDL_CreateTextureFromSurface(renderer
+                                                            , text_surface);
+        SDL_RenderCopy(renderer, text_swap, NULL, &temp);
     }
     return;
 }

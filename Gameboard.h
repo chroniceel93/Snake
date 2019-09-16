@@ -2,7 +2,6 @@
 #define GAMEBOARD_H_
 
 #include <SDL2/SDL.h>
-#include <SDL2/SDL_image.h>
 #include <SDL2/SDL_ttf.h>
 #include <iostream>
 #include <vector>
@@ -56,7 +55,7 @@ namespace Game {
         // should abort immediately
 
         SDL_Window *window; // SDL window object
-        SDL_Texture *render_texture, *text_swap; // SDL texture object (this 
+        SDL_Texture *render_texture; // SDL texture object (this 
                                     //holds gameboard state)
         SDL_Renderer *renderer; // SDL renderer object (this draws to things)
         SDL_Color background, text;  // background color

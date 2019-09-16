@@ -91,6 +91,8 @@ namespace Snake {
  **/
 		void update_snake() ;
 
+		void update_scoreboard() ;
+
 /**
  * bool oroborous_check()
  * 

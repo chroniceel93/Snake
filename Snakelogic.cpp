@@ -186,7 +186,6 @@ void Snake::Snake::update_snake() {
             board[snakex.back()][snakey.back()] = No_Apple;
             place_apple();
             score = score + 100;
-            g->draw_text(0, 0, std::to_string(score));
             pause_queue = true;
         } // else do_nothing
 
@@ -202,6 +201,16 @@ void Snake::Snake::update_snake() {
     } else {
         game = false;
     }
+    return;
+}
+
+void Snake::Snake::update_scoreboard() {
+    std::string temp;
+    temp = "Score :";
+    temp.append(std::to_string(score));
+    g->draw_text(0, 0, temp);
+    temp = "Timer: TODO";
+    g->draw_text(700, 0, temp);
     return;
 }
 
@@ -253,6 +262,7 @@ void Snake::Snake::update() {
         if (!is_apple) {
             place_apple();
             is_apple = true;
+            update_scoreboard();
         } else {
             if (g->status()) {
                 switch (input) {
@@ -288,10 +298,16 @@ void Snake::Snake::update() {
                         }
                         snakey.push(snakey.back());
                         break;
+                    case Game::KeyPressed::k_space: // turns out, this can crash
+                    // the damn thing if I don't handle it. Might as well make
+                    // it a feature.
+                        game = false; // exit button
+                        break;
                     default:
                         break;
                 }
                 update_snake();
+                update_scoreboard();
                 g->update_screen();
             } else {
                 kill_switch();
