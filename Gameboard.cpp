@@ -9,6 +9,10 @@ Game::Gameboard::Gameboard() {
     background.g = 0;
     background.b = 0;
 
+    text.r = 255;
+    text.g = 255;
+    text.b = 255;
+
     bloc_width = 10;
     bloc_height = 10;
 
@@ -49,30 +53,43 @@ Game::Gameboard::Gameboard() {
                 throw SDL_GetError();
                 SDL_Status = false;
             } else {
-                // set draw color to bg, and...
-                SDL_SetRenderDrawColor(
-                    renderer
-                    , background.r
-                    , background.g
-                    , background.b
-                    , 255);
+                if (TTF_Init() < 0 ) { // initialize SDL_TTF
+                    throw SDL_GetError();
+                    SDL_Status = false;
+                } else {
+                    // load our font
+                    font = TTF_OpenFont("Inconsolata.ttf", 10);
+                    if (font == nullptr) {
+                        throw SDL_GetError();
+                        SDL_Status = false;
+                        // because of my problems with ttf stuffs, I now know
+                        // how to get the try-catch block to work.
+                    }
+                    // set draw color to bg, and...
+                    SDL_SetRenderDrawColor(
+                        renderer
+                        , background.r
+                        , background.g
+                        , background.b
+                        , 255);
 
-                // init texture
-                render_texture = SDL_CreateTexture(renderer
-                    , SDL_PIXELFORMAT_RGBA8888
-                    , SDL_TEXTUREACCESS_TARGET
-                    , 800
-                    , 600);
+                    // init texture
+                    render_texture = SDL_CreateTexture(renderer
+                        , SDL_PIXELFORMAT_RGBA8888
+                        , SDL_TEXTUREACCESS_TARGET
+                        , 800
+                        , 600);
 
-                // set texture as render target
-                SDL_SetRenderTarget(renderer, render_texture);
+                    // set texture as render target
+                    SDL_SetRenderTarget(renderer, render_texture);
 
-                // calls blank_screen() to color the texture to match
-                // background color
-                blank_screen();
-                
-                // present the renderer!
-                SDL_RenderPresent(renderer);
+                    // calls blank_screen() to color the texture to match
+                    // background color
+                    blank_screen();
+                    
+                    // present the renderer!
+                    SDL_RenderPresent(renderer);
+                }
             }
         }
     }
@@ -175,6 +192,36 @@ void Game::Gameboard::draw_block( int xpos
         ,background.g
         ,background.b
         ,255);
+    return;
+}
+
+void Game::Gameboard::draw_text ( int xpos
+    , int ypos
+    , std::string input) {
+
+    SDL_Rect temp; // holds dimensions of text box
+
+
+
+    // It's generally really really bad to use cstrings. No choice.
+    SDL_Surface *text_surface = TTF_RenderText_Solid( font
+                                                    , input.c_str() 
+                                                    , text);
+    if (text_surface == nullptr) {
+        throw "Failed to load text to surface";
+    } else {
+        temp.w = text_surface->w;
+        temp.h = text_surface->h;
+        temp.x = xpos;
+        temp.y = ypos;
+
+        // clear space where text will be rendererd
+        SDL_RenderFillRect(renderer, &temp);
+
+        // render text
+        text_swap = SDL_CreateTextureFromSurface(renderer, text_surface);
+        SDL_RenderCopy(renderer, text_swap, &temp, &temp);
+    }
     return;
 }
 

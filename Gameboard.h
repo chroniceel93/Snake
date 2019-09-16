@@ -2,6 +2,7 @@
 #define GAMEBOARD_H_
 
 #include <SDL2/SDL.h>
+#include <SDL2/SDL_image.h>
 #include <SDL2/SDL_ttf.h>
 #include <iostream>
 #include <vector>
@@ -46,6 +47,8 @@ namespace Game {
         int bloc_height; // how high the block is
         int bloc_width; // how wide a block is
 
+        int score;
+
         const int screen_width = 800;
         const int screen_height = 600;
 
@@ -53,11 +56,13 @@ namespace Game {
         // should abort immediately
 
         SDL_Window *window; // SDL window object
-        SDL_Texture *render_texture; // SDL texture object (this holds gameboard
-                                    // state)
+        SDL_Texture *render_texture, *text_swap; // SDL texture object (this 
+                                    //holds gameboard state)
         SDL_Renderer *renderer; // SDL renderer object (this draws to things)
-        SDL_Color background;  // background color
+        SDL_Color background, text;  // background color
         SDL_Event input; // input queue
+
+        TTF_Font *font;
 
         KeyPressed mem; 
 
@@ -98,6 +103,10 @@ namespace Game {
             , unsigned char g
             , unsigned char b);
 
+        void draw_text ( int xpos
+            , int ypos
+            , std::string input);
+
 /**
  * void input_reset()
  * 
@@ -111,6 +120,9 @@ namespace Game {
  * Simple utility function that updates the background color.
  **/
         void set_bg_color(unsigned char r, unsigned char g, unsigned char b) ;
+
+        void set_text_color(unsigned char r, unsigned char g,
+                            unsigned char b);
 
 /**
  * void update_screen()

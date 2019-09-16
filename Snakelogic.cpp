@@ -186,6 +186,7 @@ void Snake::Snake::update_snake() {
             board[snakex.back()][snakey.back()] = No_Apple;
             place_apple();
             score = score + 100;
+            g->draw_text(0, 0, std::to_string(score));
             pause_queue = true;
         } // else do_nothing
 

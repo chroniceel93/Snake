@@ -27,8 +27,7 @@ namespace Snake {
 
 		Game::Gameboard *g; // gameboard handles I/O for game logic
 
-		int score;
-		// score is currently unused, but I've got plans
+		int score; // score counter!
 
 		Game::KeyPressed input, input_old;
 		// input is the input for the current tick
