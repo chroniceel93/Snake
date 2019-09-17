@@ -22,7 +22,16 @@ namespace Snake {
 		};
 
 		// Note to self: Co-ordinate system takes top left as (0, 0).
-		bool board[80][59], pause_queue, game, exit;
+		const int BOUNDL = 0;
+		const int BOUNDR = 81;
+		const int BOUNDU = 1;
+		const int BOUNDD = 60;
+		
+		// bool board is a little bigger than it needs to be. This is intention-
+		// al. If it's just one row too small in either direction, we start fli-
+		// pping random bits of unused memory on and off. Not exactly great.
+		bool board[81][60], pause_queue, game, exit;
+
 		bool is_apple; // set to true when appple is put on board
 
 		Game::Gameboard *g; // gameboard handles I/O for game logic
@@ -32,15 +41,14 @@ namespace Snake {
 		// boundaries for game logic, math taken from a 80x60 board, where the
 		// top two rows are off-limits (from rows 0-59, where the 0th row is 
 		// off limits)
-		const int BOUNDL = 0;
-		const int BOUNDR = 81;
-		const int BOUNDU = 1;
-		const int BOUNDD = 60;
-	
-		const float TICK_TIME = 100; //in miliseconds, as per SDL
 
-		float time_since_tick = 0.0;
-		float time = 0.0;
+	
+		const double TICK_TIME = 100; //in miliseconds, as per SDL
+
+		double time_since_tick = 0.0; // time elapsed since last tick
+		double time_count = 0.0; // current time, to compare.
+		double time_start = 0.0; // time_count at start of round
+		double time_score = 0.0; // time_count - time_start (for scoreboard)
 		
 		Game::KeyPressed input, input_old;
 		// input is the input for the current tick

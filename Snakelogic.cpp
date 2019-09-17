@@ -21,6 +21,7 @@ Snake::Snake::Snake() {
         }
     }
     is_apple = false;
+    time_start = SDL_GetTicks();
 }
 
 /**
@@ -129,13 +130,28 @@ void Snake::Snake::place_apple() {
  **/
 void Snake::Snake::restart_game() { // copy of constructor stuffs
     // re-init variables
-    score = 0;
-
-    game = true;
-    is_apple = false;
-    pause_queue = true; //start paused so snake is two long
-    
     input = Game::KeyPressed::k_right;
+    score = 0;
+    pause_queue = true; //start paused so snake is two long
+    game = true;
+    if (g->status()) {
+        game = true;
+        exit = false;
+    } else {
+        game = false;
+        exit = true;
+    }
+
+    // re-initialize the board
+    for (auto &x : board) {
+        for (auto &y : x) {
+            y = No_Apple;
+       
+        }
+    }
+    
+    is_apple = false;
+    time_start = SDL_GetTicks();
 
     // empty the co-ordinate queues
     while (!snakey.empty()) {
@@ -147,14 +163,6 @@ void Snake::Snake::restart_game() { // copy of constructor stuffs
     // add default values to co-ordinate queues
     snakex.push(40);
     snakey.push(29);
-
-    // re-initialize the board
-    for (auto &x : board) {
-        for (auto &y : x) {
-            y = No_Apple;
-       
-        }
-    }
     
     // redraw background over old board state
     g->blank_screen();
@@ -212,7 +220,8 @@ void Snake::Snake::update_scoreboard() {
     temp.append(std::to_string(score));
     g->draw_text(0, 0, temp);
     temp = "Timer: ";
-    temp.append(std::to_string(time / 1000));
+    time_score = time_count - time_start;
+    temp.append(std::to_string(time_score / 1000));
     g->draw_text(700, 0, temp);
     return;
 }
@@ -260,9 +269,9 @@ bool Snake::Snake::oroborous_check() {
 void Snake::Snake::update() {
     input = g->update_input();
     input_override();
-    time = SDL_GetTicks();
-    if ((time - time_since_tick) >= TICK_TIME) {
-        time_since_tick = time;
+    time_count = SDL_GetTicks();
+    if ((time_count - time_since_tick) >= TICK_TIME) {
+        time_since_tick = time_count;
         if (game) {
             // handle case where no apples are currently on board
             if (!is_apple) {
