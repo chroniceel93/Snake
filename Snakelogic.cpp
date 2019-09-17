@@ -85,9 +85,9 @@ void Snake::Snake::kill_switch() {
  **/
 void Snake::Snake::place_apple() {
     // generate random co-ordinates that fit on 80x59 grid
-    int x = std::rand() % (boundr - boundl);
+    int x = std::rand() % (BOUNDR - BOUNDL);
     // plus one to stop apples in scoreboard
-    int y = (std::rand() % (boundd - boundu)) + 2; 
+    int y = (std::rand() % (BOUNDD - BOUNDU)) + 2; 
 
     // check coordinates to see if snake is on the board position
     std::queue<int> tempx, tempy;
@@ -208,10 +208,11 @@ void Snake::Snake::update_snake() {
 
 void Snake::Snake::update_scoreboard() {
     std::string temp;
-    temp = "Score :";
+    temp = "Score: ";
     temp.append(std::to_string(score));
     g->draw_text(0, 0, temp);
-    temp = "Timer: TODO";
+    temp = "Timer: ";
+    temp.append(std::to_string(time / 1000));
     g->draw_text(700, 0, temp);
     return;
 }
@@ -259,73 +260,77 @@ bool Snake::Snake::oroborous_check() {
 void Snake::Snake::update() {
     input = g->update_input();
     input_override();
-    if (game) {
-        // handle case where no apples are currently on board
-        if (!is_apple) {
-            place_apple();
-            is_apple = true;
-            update_scoreboard();
+    time = SDL_GetTicks();
+    if ((time - time_since_tick) >= TICK_TIME) {
+        time_since_tick = time;
+        if (game) {
+            // handle case where no apples are currently on board
+            if (!is_apple) {
+                place_apple();
+                is_apple = true;
+                update_scoreboard();
+            } else {
+                if (g->status()) { // we only want this to happen every 100 ms.
+                    switch (input) {
+                        case Game::KeyPressed::k_up:
+                            snakex.push(snakex.back());
+                            if ((snakey.back() -1) == BOUNDU) {
+                                game = false; // oob, game over
+                            } else {
+                                snakey.push(snakey.back() - 1);
+                            }
+                            break;
+                        case Game::KeyPressed::k_right:
+                            if ((snakex.back() + 1) == BOUNDR) {
+                                game = false; // oob, game over
+                            } else {
+                                snakex.push(snakex.back() + 1);
+                            }
+                            snakey.push(snakey.back());
+                            break;
+                        case Game::KeyPressed::k_down:
+                            snakex.push(snakex.back());
+                            if ((snakey.back() + 1) == BOUNDD) {
+                                game = false; // oob, game over
+                            } else {
+                                snakey.push(snakey.back() + 1);
+                            }
+                            break;
+                        case Game::KeyPressed::k_left:
+                            if ((snakex.back() - 1) == BOUNDL) {
+                                game = false; // oob, game over
+                            } else {
+                                snakex.push(snakex.back() - 1);
+                            }
+                            snakey.push(snakey.back());
+                            break;
+                        case Game::KeyPressed::k_space: // turns out, this can crash
+                        // the damn thing if I don't handle it. Might as well make
+                        // it a feature.
+                            game = false; // exit button
+                            break;
+                        default:
+                            break;
+                    }
+                    update_snake();
+                } else {
+                    kill_switch();
+                }
+            }   
+            input_old = input;
         } else {
             if (g->status()) {
-                switch (input) {
-                    case Game::KeyPressed::k_up:
-                        snakex.push(snakex.back());
-                        if ((snakey.back() -1) == boundu) {
-                            game = false; // oob, game over
-                        } else {
-                            snakey.push(snakey.back() - 1);
-                        }
-                        break;
-                    case Game::KeyPressed::k_right:
-                        if ((snakex.back() + 1) == boundr) {
-                            game = false; // oob, game over
-                        } else {
-                            snakex.push(snakex.back() + 1);
-                        }
-                        snakey.push(snakey.back());
-                        break;
-                    case Game::KeyPressed::k_down:
-                        snakex.push(snakex.back());
-                        if ((snakey.back() + 1) == boundd) {
-                            game = false; // oob, game over
-                        } else {
-                            snakey.push(snakey.back() + 1);
-                        }
-                        break;
-                    case Game::KeyPressed::k_left:
-                        if ((snakex.back() - 1) == boundl) {
-                            game = false; // oob, game over
-                        } else {
-                            snakex.push(snakex.back() - 1);
-                        }
-                        snakey.push(snakey.back());
-                        break;
-                    case Game::KeyPressed::k_space: // turns out, this can crash
-                    // the damn thing if I don't handle it. Might as well make
-                    // it a feature.
-                        game = false; // exit button
-                        break;
-                    default:
-                        break;
-                }
-                update_snake();
-                update_scoreboard();
-                g->update_screen();
+                if (input == Game::KeyPressed::k_space) {
+                    restart_game();
+                } else {} // do nothing
             } else {
                 kill_switch();
             }
-        }   
-        input_old = input;
-    } else {
-        if (g->status()) {
-            if (input == Game::KeyPressed::k_space) {
-                restart_game();
-            } else {} // do nothing
-        } else {
-            kill_switch();
         }
     }
-    SDL_Delay(100); // delay 100ms after every tick
+    update_scoreboard();
+    g->update_screen(); //we want to re-draw screen ever tick regardless of
+    // game state
     // TODO: Make each tick last exactly 100ms (unless tick goes over)
     return;
 }

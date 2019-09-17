@@ -28,10 +28,19 @@ namespace Snake {
 		Game::Gameboard *g; // gameboard handles I/O for game logic
 
 		int score;// score counter!
-		const int boundl = 0;
-		const int boundr = 81;
-		const int boundu = 1;
-		const int boundd = 60;
+
+		// boundaries for game logic, math taken from a 80x60 board, where the
+		// top two rows are off-limits (from rows 0-59, where the 0th row is 
+		// off limits)
+		const int BOUNDL = 0;
+		const int BOUNDR = 81;
+		const int BOUNDU = 1;
+		const int BOUNDD = 60;
+	
+		const float TICK_TIME = 100; //in miliseconds, as per SDL
+
+		float time_since_tick = 0.0;
+		float time = 0.0;
 		
 		Game::KeyPressed input, input_old;
 		// input is the input for the current tick

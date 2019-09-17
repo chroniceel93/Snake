@@ -221,7 +221,10 @@ void Game::Gameboard::draw_text ( int xpos
         SDL_Texture *text_swap = SDL_CreateTextureFromSurface(renderer
                                                             , text_surface);
         SDL_RenderCopy(renderer, text_swap, NULL, &temp);
+        // remember to destroy stuff, or else
+        SDL_DestroyTexture(text_swap);
     }
+    SDL_FreeSurface(text_surface); 
     return;
 }
 
