@@ -214,6 +214,14 @@ void Snake::Snake::update_snake() {
     return;
 }
 
+/**
+ * void update_scoreboard()
+ * 
+ * Draws the current score and time to the screen. "Pauses" the timer if game is
+ * false, by simply not updating it. Time is derived from current time - the
+ * time since the round has started. Time is casted into an int to get rid of
+ * trailing digits.
+ **/
 void Snake::Snake::update_scoreboard() {
     std::string temp;
     temp = "Score: ";

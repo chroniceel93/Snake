@@ -195,6 +195,16 @@ void Game::Gameboard::draw_block( int xpos
     return;
 }
 
+/**
+ * void draw_text()
+ * 
+ * Takes a co-ordinate pair and a string, renders the string as text to a surf-
+ * ace, copies that to a texture, and draws to the render texture at the given
+ * co-ordinates.
+ * 
+ * The co-ordinates DO NOT conform to the 80x60 grid, so make sure to give the
+ * unmodified coordinates.
+ **/
 void Game::Gameboard::draw_text ( int xpos
     , int ypos
     , std::string input) {
@@ -245,12 +255,26 @@ void Game::Gameboard::input_reset() {
  * Simple utility function that updates the background color.
  **/
 void Game::Gameboard::set_bg_color(unsigned char r
-    , unsigned char g
-    , unsigned char b) {
+                                , unsigned char g
+                                , unsigned char b) {
     // set background color to that given
     background.r = static_cast<int>(r);
     background.g = static_cast<int>(g);
     background.b = static_cast<int>(b);
+    return;
+}
+
+/**
+ * void set_text_color()
+ * 
+ * Simple utility function that updates the text color.
+ **/
+void Game::Gameboard::set_text_color( unsigned char r
+                                    , unsigned char g
+                                    , unsigned char b) {
+    text.r = r;
+    text.g = g;
+    text.b = b;
     return;
 }
 

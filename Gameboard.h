@@ -61,9 +61,9 @@ namespace Game {
         SDL_Color background, text;  // background color
         SDL_Event input; // input queue
 
-        TTF_Font *font;
+        TTF_Font *font; // font object
 
-        KeyPressed mem; 
+        KeyPressed mem; // stores last valid input
 
     public:
 
@@ -102,6 +102,17 @@ namespace Game {
             , unsigned char g
             , unsigned char b);
 
+
+/**
+ * void draw_text()
+ * 
+ * Takes a co-ordinate pair and a string, renders the string as text to a surf-
+ * ace, copies that to a texture, and draws to the render texture at the given
+ * co-ordinates.
+ * 
+ * The co-ordinates DO NOT conform to the 80x60 grid, so make sure to give the
+ * unmodified coordinates.
+ **/
         void draw_text ( int xpos
             , int ypos
             , std::string input);
@@ -120,6 +131,11 @@ namespace Game {
  **/
         void set_bg_color(unsigned char r, unsigned char g, unsigned char b) ;
 
+/**
+ * void set_text_color()
+ * 
+ * Simple utility function that updates the text color.
+ **/
         void set_text_color(unsigned char r, unsigned char g,
                             unsigned char b);
 

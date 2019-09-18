@@ -1,7 +1,5 @@
 #include "snake.h"
 
-#include "Gameboard.h"
-
 const int W = 800;
 const int H = 600;
 
@@ -21,7 +19,5 @@ int main() {
 
     return 0; 
 }
-
-// TODO: ticker class?
 
 // Author: William Tradewell - ChronicEel93
