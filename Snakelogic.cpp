@@ -219,10 +219,13 @@ void Snake::Snake::update_scoreboard() {
     temp = "Score: ";
     temp.append(std::to_string(score));
     g->draw_text(0, 0, temp);
-    temp = "Timer: ";
-    time_score = time_count - time_start;
-    temp.append(std::to_string(time_score / 1000));
-    g->draw_text(700, 0, temp);
+    if (game) {
+        temp = "Timer: ";
+        time_score = time_count - time_start;
+        temp.append(std::to_string(static_cast<int>(time_score) / 1000));
+        g->draw_text(700, 0, temp);
+    } else {} // do_nothing
+
     return;
 }
 
